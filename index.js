@@ -5,7 +5,7 @@ const path = require('path')
 
 // Run your GitHub Action!
 Toolkit.run(async tools => {
-  const slackToken      = process.env.SLACK_TOKEN      // Secret
+  const slackToken      = process.env.SLACK_BOT_TOKEN  // Secret
   const convsersationID = process.env.CONVERSATION_ID  // Secret (optional)
   const filename        = process.env.MESSAGE_FILE     // Env (if specified will be used, and must be at the root of the workspace)
   const messageString   = process.env.MESSAGE_STRING   // Env (expected if filename is not provided)
