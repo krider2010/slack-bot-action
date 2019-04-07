@@ -10,13 +10,15 @@ This Action can easily be installed either via the GitHub Actions Marketplace or
 
 <img src="NotifySlack.png">
 
+Be sure to use the current latest release (tag) when referencing this Action. It is far safer to lock to a specific version for your Workflow and allows you the choice of when to upgrade.
+
 ### Using Action Output
 
 A lot of the time, the message you want to send to Slack is going to be dependent on what has happened in previous Actions in the Workflow. In this case, the URL or user, or outcome of other processing is important. Since we cannot pass details from one Action to another in Workflow files, we have to be creative about it! Actions specify that `$GITHUB_WORKSPACE` is available to all Actions, and it is not thrown away during a Workflow run. This workspace means we can have other Actions output a Slack message as JSON (in the [format specified by Slack](https://api.slack.com/methods/chat.postMessage)) and then have this Action send it to Slack.
 
 ```
 action "Notify Slack" {
-  uses = "krider2010/slack-bot-action@master"
+  uses = "krider2010/slack-bot-action@1.0.0"
   secrets = ["SLACK_BOT_TOKEN", "CONVERSATION_ID"]
   env = {
     MESSAGE_FILE = "slack-message.json"
@@ -31,7 +33,7 @@ If your need is more along the lines that you want to notify a Slack conversatio
 
 ```
 action "Notify Slack" {
-  uses = "krider2010/slack-bot-action@master"
+  uses = "krider2010/slack-bot-action@1.0.0"
   secrets = ["SLACK_BOT_TOKEN"]
   env = {
     MESSAGE_STRING = "{ \"channel\": \"C1234567890\", \"text\": \"We've created a new release! Why not check it out at http:\/\/github.com\/awesome\/software\/releases :tada:\" }"

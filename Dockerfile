@@ -7,7 +7,8 @@ LABEL "com.github.actions.icon"="hash"
 LABEL "com.github.actions.color"="purple"
 
 LABEL "repository"="http://github.com/krider2010/slack-bot-action"
-LABEL "maintainer"="Claire Knight <krider2010@github.com>"
+LABEL "maintainer"="Claire Knight <krider2010@gmail.com>"
+LABEL "version"="1.0.0"
 
 # Copy the package.json and package-lock.json
 COPY package*.json ./
