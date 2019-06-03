@@ -18,7 +18,7 @@ A lot of the time, the message you want to send to Slack is going to be dependen
 
 ```
 action "Notify Slack" {
-  uses = "krider2010/slack-bot-action@1.0.0"
+  uses = "krider2010/slack-bot-action@1.0.1"
   secrets = ["SLACK_BOT_TOKEN", "CONVERSATION_ID"]
   env = {
     MESSAGE_FILE = "slack-message.json"
@@ -33,7 +33,7 @@ If your need is more along the lines that you want to notify a Slack conversatio
 
 ```
 action "Notify Slack" {
-  uses = "krider2010/slack-bot-action@1.0.0"
+  uses = "krider2010/slack-bot-action@1.0.1"
   secrets = ["SLACK_BOT_TOKEN"]
   env = {
     MESSAGE_STRING = "{ \"channel\": \"C1234567890\", \"text\": \"We've created a new release! Why not check it out at http:\/\/github.com\/awesome\/software\/releases :tada:\" }"

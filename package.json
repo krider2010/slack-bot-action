@@ -1,6 +1,6 @@
 {
   "name": "slack-bot-action",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": true,
   "main": "index.js",
   "scripts": {
@@ -12,7 +12,7 @@
   "license": "MIT",
   "homepage": "https://github.com/krider2010/slack-bot-action",
   "dependencies": {
-    "@slack/web-api": "5.0.0",
+    "@slack/web-api": "5.0.1",
     "actions-toolkit": "^2.0.0",
     "fs-extra": "7.0.1",
     "path": "0.12.7"
