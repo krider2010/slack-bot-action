@@ -1,0 +1,13 @@
+name: 'Slack Bot Action'
+description: 'A GitHub Action that posts a message to Slack either from hardcoded strings or data from previous workflow Actions/steps'
+inputs:
+  var-name:
+    description: 'Environment variable containing the slack message to post'
+    required: false
+    default: 'MESSAGE'
+  message-string:
+    description: 'String containing the slack message to post'
+    required: false
+runs:
+  using: 'node12'
+  main: 'index.js'

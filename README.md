@@ -4,44 +4,47 @@ This GitHub Action wraps the Slack [chat.postMessage](https://api.slack.com/meth
 
 Messages are sent using [Slack bot tokens](https://api.slack.com/docs/token-types) which are (as suggested by [Slack themselves](https://medium.com/slack-developer-blog/the-latest-with-app-tokens-fe878d44130c)) more resilient to installing users disappearing and because they allow a better kind of integration. More capabilities, and more importantly for making these messages stand out, supporting a range of [bot users](https://api.slack.com/bot-users#creating-bot-user) to customise how the message appears in Slack.
 
+**Note**: This has been tweaked a lot for Actions V2. If you were previously using it in a workflow, that may fail unless you locked to the specific version. Instead of relying now on the filesystem, this action looks for an environment variable for the message file (strings can still be specified). Any preceeding action can set this using `core.exportVariable('message', "{ \"channel\": \"C1234567890\", \"text\": \"We've created a new release! Why not check it out at http:\/\/github.com\/awesome\/software\/releases :tada:\" }")`
+
 ## Usage
 
-This Action can easily be installed either via the GitHub Actions Marketplace or by referencing it in your Workflow file. Either in the visual editor or the text editor as you prefer.
-
-<img src="NotifySlack.png">
+This Action can easily be installed either via the GitHub Actions Marketplace or by referencing it in your Workflow file.
 
 Be sure to use the current latest release (tag) when referencing this Action. It is far safer to lock to a specific version for your Workflow and allows you the choice of when to upgrade.
 
 ### Using Action Output
 
-A lot of the time, the message you want to send to Slack is going to be dependent on what has happened in previous Actions in the Workflow. In this case, the URL or user, or outcome of other processing is important. Since we cannot pass details from one Action to another in Workflow files, we have to be creative about it! Actions specify that `$GITHUB_WORKSPACE` is available to all Actions, and it is not thrown away during a Workflow run. This workspace means we can have other Actions output a Slack message as JSON (in the [format specified by Slack](https://api.slack.com/methods/chat.postMessage)) and then have this Action send it to Slack.
+A lot of the time, the message you want to send to Slack is going to be dependent on what has happened in previous Actions in the Workflow. In this case, we can make use of the enhancments in Actions V2 to set an environment variable in previews steps and this Action will use that. This means we can have other Actions set an environment varible with a Slack message as JSON (in the [format specified by Slack](https://api.slack.com/methods/chat.postMessage)) and this Action will sent it to Slack.
 
+If you want to use this using the `core` part of the Actions Toolkit you can do it by writing:
+
+```javascript
+core.exportVariable('MESSAGE', JSON.stringify(action-output-object))
 ```
-action "Notify Slack" {
-  uses = "krider2010/slack-bot-action@1.0.1"
-  secrets = ["SLACK_BOT_TOKEN", "CONVERSATION_ID"]
-  env = {
-    MESSAGE_FILE = "slack-message.json"
-  }
-  needs = ["Another Action To Generate slack-message.json"]
-}
+
+It's possible, but optional, to specify the name of the environment variable here, but otherwise it defaults to `MESSAGE`.
+
+```yaml
+steps:
+  - name: Notify Slack
+    uses: krider2010/slack-bot-action@1.1.0
+    with:
+      var-name: 'SOME_OTHER_NAME'
 ```
 
 ### Providing Hardcoded Data
 
 If your need is more along the lines that you want to notify a Slack conversation if a release happens (for example) and the release page, with the latest releases always on the same URL (e.g. `https://github.com/user-or-org/repo-name/releases`), then you may want to use hardcoded values. You can do this with the following setup:
 
-```
-action "Notify Slack" {
-  uses = "krider2010/slack-bot-action@1.0.1"
-  secrets = ["SLACK_BOT_TOKEN"]
-  env = {
-    MESSAGE_STRING = "{ \"channel\": \"C1234567890\", \"text\": \"We've created a new release! Why not check it out at http:\/\/github.com\/awesome\/software\/releases :tada:\" }"
-  }
-}
+```yaml
+steps:
+  - name: Notify Slack
+    uses: krider2010/slack-bot-action@1.1.0
+    with:
+      message-string: "{ \"channel\": \"C1234567890\", \"text\": \"We've created a new release! Why not check it out at http:\/\/github.com\/awesome\/software\/releases :tada:\" }"
 ```
 
-As with the file from a previous Action running, the information provided to this action must be a valid JSON object, though in this case encoded as a String. Which handily, the visual editor on GitHub will do for you. You only need to escape things if you are editing the Workflow as a text file :grin:
+As with the environmental message from a previous Action running, the information provided to this action must be a valid JSON object, encoded as a string.
 
 ## Setup
 
@@ -51,7 +54,7 @@ For this use case, you do not need to worry about Step 2 of the guide. You can j
 
 ## Secrets Needed
 
-Once you've set up the Slack integration take the access token (starting with `xoxb-`) and set that as the Secret named `SLACK_BOT_TOKEN` on this Action inside the GitHub visual editor.
+Once you've set up the Slack integration take the access token (starting with `xoxb-`) and set that as the Secret named `SLACK_BOT_TOKEN` on this Action.
 
 ### So What About CONVERSATION_ID?
 
@@ -61,6 +64,6 @@ If you use the Desktop or Mobile clients for Slack, the IDs are hidden. You can 
 
 ## Oher Information
 
-The Action requires that either `MESSAGE_FILE` or `MESSAGE_STRING` is provided as part of the `env` provided to the running Action. If neither is there, the Action will report an error to that effect. These must be VALID JSON as already described above.
+The Action requires that either `MESSAGE` or `MESSAGE_STRING` is provided to the running Action. If neither is there, the Action will report an error to that effect. These must be VALID JSON as already described above.
 
 If the message cannot be sent to Slack for whatever reason, that error is returned in the logging of the Action, and the Action page reflects this in the status of the Action run.
