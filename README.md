@@ -59,7 +59,7 @@ It's possible to set CONVERSATION_ID either as a secret or specify it in the JSO
 
 If you use the Desktop or Mobile clients for Slack, the IDs are hidden. You can discover them by (from the Desktop client) right clicking on the channel/private group/individual and selecting _Copy link_. This link is of the form `https://myworkspace.slack.com/messages/CONVERSATION_ID`. It's that last piece of the URL you need to provide which is a combination of capital letters and numbers. At the time of writing, it seems that DMs start with a D, Groups (private channels) start with G, and Channels with C. If you use the web interface the ID you need is the last part of the URL bar at the top :smile:
 
-## Oher Information
+## Other Information
 
 The Action requires that either `MESSAGE_FILE` or `MESSAGE_STRING` is provided as part of the `env` provided to the running Action. If neither is there, the Action will report an error to that effect. These must be VALID JSON as already described above.
 
